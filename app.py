@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS,cross_origin
 
 app = Flask(__name__)
-CORS(app, origins=["*"])  # Enable CORS for all routes
+app.secret_key = "SECRET_KEY"
+CORS(app)  # Enable CORS for all routes
 
 # Expanded library metadata with more books and topics
 library_metadata = {
@@ -105,6 +106,7 @@ def llm_response(query):
     return response_data
 
 @app.route('/api/chat', methods=['POST', 'OPTIONS'])
+@cross_origin(origin="*", send_wildcard=True)
 def chat():
     if request.method == 'OPTIONS':
         return jsonify({}), 200
